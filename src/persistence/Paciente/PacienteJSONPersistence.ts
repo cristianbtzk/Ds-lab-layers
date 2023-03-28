@@ -28,4 +28,13 @@ export default class PacienteJSONPersistence implements IPacientePersistence {
     const pacientesFormatados = pacientes.map((p: any) => new Paciente(p.id, p.nome, p.peso, p.altura))
     return pacientesFormatados
   }
+
+  async buscarId(id: string) {
+    const pacientes = JSON.parse(await fs.readFile('db/pacientes.json', 'utf8'))
+  
+    const paciente = pacientes.find((p: any) => p.id === id)
+    if(!paciente) return null
+
+    return new Paciente(paciente.id, paciente.nome, paciente.peso, paciente.altura)
+  }
 }

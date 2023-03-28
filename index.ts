@@ -1,12 +1,16 @@
 import promptS from 'prompt-sync'
 import Medicacao from './src/classes/Medicacao'
 import Paciente from './src/classes/Paciente'
+import Receita from './src/classes/Receita'
 import MedicacaoController from './src/controller/MedicacaoController'
 import PacienteController from './src/controller/PacienteController'
+import ReceitaController from './src/controller/ReceitaController'
 
 const pacienteController = new PacienteController()
 
 const medicacaoController = new MedicacaoController()
+
+const receitaController = new ReceitaController()
 
 const prompt = promptS();
 
@@ -72,6 +76,27 @@ const prompt = promptS();
         const medicacoes = await medicacaoController.listar()
         medicacoes.forEach((medicacao: Medicacao) => {
           console.log(medicacao);
+
+        });
+        break;
+
+      case 7:
+        const idPacienteReceita = prompt('Qual o id do paciente: ')
+
+        await receitaController.create(idPacienteReceita)
+        break;
+
+      case 8:
+        const idReceita = prompt('Qual o id da receita: ')
+
+        receitaController.excluir(idReceita)
+        console.log('Receita excluída');
+        break;
+
+      case 9:
+        const receitas = await receitaController.listar()
+        receitas.forEach((receita: Receita) => {
+          console.log(receita);
 
         });
         break;

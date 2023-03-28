@@ -5,9 +5,9 @@ export default class Receita {
   private id: string;
   private data: Date; 
   private medicacoes: Medicacao[]; 
-  private paciente: Paciente;
+  private paciente: Paciente | null;
 
-  constructor(id: string, data: Date, paciente: Paciente, medicacoes: Medicacao[]){
+  constructor(id: string, data: Date, paciente: Paciente | null, medicacoes: Medicacao[]){
     this.id = id;
     this.data = data
     this.paciente = paciente;

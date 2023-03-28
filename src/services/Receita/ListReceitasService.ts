@@ -1,13 +1,13 @@
 import Receita from '../../classes/Receita';
 import IReceitaPersistence from '../../persistence/Receita/IReceitaPersistence';
 
-export default class CreateReceitaService {
+export default class ListReceitasService {
   private receitaPersistence: IReceitaPersistence;
   constructor(receitaPersistence: IReceitaPersistence) {
     this.receitaPersistence = receitaPersistence;
   }
 
-  async execute(Receita: Receita) {
-    this.receitaPersistence.gravar(Receita)
+  async execute(): Promise<Receita[]> {
+    return this.receitaPersistence.listar()
   }
 }

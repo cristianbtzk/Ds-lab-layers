@@ -32,7 +32,10 @@ export default class ReceitaJSONPersistence implements IReceitaPersistence {
   async listar() {
     const receitas = JSON.parse(await fs.readFile('db/receitas.json', 'utf8'))
     if(!receitas.length) return []
-    const receitasFormatadas = receitas.map((r: ReceitaFile) => new Receita(r.id, r.data, r.paciente, r.medicacoes))
+    const receitasFormatadas = receitas.map((r: ReceitaFile) => {
+
+      return new Receita(r.id, r.data, r.paciente, r.medicacoes)
+    })
     return receitasFormatadas
   }
 }

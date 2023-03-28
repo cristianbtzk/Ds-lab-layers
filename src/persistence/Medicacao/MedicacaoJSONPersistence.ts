@@ -35,4 +35,13 @@ export default class MedicacaoJSONPersistence implements IMedicacaoPersistence {
     const medicacoesFormatadas = medicacoes.map((m: MedicacaoFile) => new Medicacao(m.id, m.nome, m.unidade, m.quantidade, m.valor))
     return medicacoesFormatadas
   }
+
+  async buscarId(id: string) {
+    const medicacoes = JSON.parse(await fs.readFile('db/medicacoes.json', 'utf8'))
+  
+    const medicacao: MedicacaoFile = medicacoes.find((m: MedicacaoFile) => m.id === id)
+    if(!medicacao) return null
+
+    return new Medicacao(medicacao.id, medicacao.nome, medicacao.unidade, medicacao.quantidade, medicacao.valor)
+  }
 }
