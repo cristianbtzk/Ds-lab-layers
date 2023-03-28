@@ -13,8 +13,12 @@ type ReceitaFile = {
 }
 
 export default class ReceitaJSONPersistence implements IReceitaPersistence {
-  excluir(p: Receita) {
+  async excluir(id: string) {
+    const receitas = JSON.parse(await fs.readFile('db/receitas.json', 'utf8'))
 
+    const receitasToWrite = receitas.filter((p: any) => p.id !== id)
+    
+    await fs.writeFile('db/receitas.json', JSON.stringify(receitasToWrite))
   }
 
   async gravar(m: Receita) {
