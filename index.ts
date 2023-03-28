@@ -1,18 +1,16 @@
 import promptS from 'prompt-sync'
-import MedicacaoController from './controller/medicacao'
-import PacienteController from './controller/paciente'
-import MedicacaoJSONPersistence from './persistence/Medicacao/MedicacaoJSONPersistence'
-import PacienteJSONPersistence from './persistence/Paciente/PacienteJSONPersistence'
+import Medicacao from './src/classes/Medicacao'
+import Paciente from './src/classes/Paciente'
+import MedicacaoController from './src/controller/MedicacaoController'
+import PacienteController from './src/controller/PacienteController'
 
-const userPersistence = new PacienteJSONPersistence()
-const pacienteController = new PacienteController(userPersistence)
+const pacienteController = new PacienteController()
 
-const medicacaoPersistence = new MedicacaoJSONPersistence()
-const medicacaoController = new MedicacaoController(medicacaoPersistence)
+const medicacaoController = new MedicacaoController()
 
 const prompt = promptS();
 
-(() => {
+(async () => {
   while (true) {
     console.log('1 - Criar usuário')
     console.log('2 - Deletar usuário')
@@ -23,8 +21,9 @@ const prompt = promptS();
     console.log('7 - Cadastrar receita')
     console.log('8 - Deletar receita')
     console.log('9 - Exibir receitas')
+    console.log('0 - Sair')
 
-    const opcao = Number(prompt("Informe a opção:"))
+    const opcao = Number(prompt("Informe a opção: "))
     console.log(opcao)
 
     switch (opcao) {
@@ -38,9 +37,16 @@ const prompt = promptS();
         pacienteController.create(nome, peso, altura)
         break;
 
+      case 2:
+        const idPaciente = prompt('Id: ')
+        pacienteController.excluir(idPaciente)
+        console.log('Paciente excluído')
+
+        break;
+
       case 3:
-        const pacientes = pacienteController.listar()
-        pacientes.forEach(paciente => {
+        const pacientes = await pacienteController.listar()
+        pacientes.forEach((paciente: Paciente) => {
           console.log(paciente);
 
         });
@@ -55,9 +61,16 @@ const prompt = promptS();
         medicacaoController.create(nomeMed, unidadeMed, quantidadeMed, valorMed)
         break;
 
+      case 5:
+        const idMedicacao = prompt('Id: ')
+        medicacaoController.excluir(idMedicacao)
+        console.log('Medicação excluída')
+
+        break
+
       case 6:
-        const medicacoes = medicacaoController.listar()
-        medicacoes.forEach(medicacao => {
+        const medicacoes = await medicacaoController.listar()
+        medicacoes.forEach((medicacao: Medicacao) => {
           console.log(medicacao);
 
         });

@@ -1,12 +1,12 @@
 import IReceitaPersistence from "./IReceitaPersistence";
 
-import receitas from '../../db/receitas.json'
 import Receita from "../../classes/Receita";
-import fs from 'fs'
+import fs from 'fs/promises'
 import Medicacao from "../../classes/Medicacao";
 import Paciente from "../../classes/Paciente";
 
 type ReceitaFile = {
+  id: string;
   data: Date;
   medicacoes: Medicacao[];
   paciente: Paciente;
@@ -18,13 +18,17 @@ export default class ReceitaJSONPersistence implements IReceitaPersistence {
   }
 
   async gravar(m: Receita) {
+    const receitas = JSON.parse(await fs.readFile('db/receitas.json', 'utf8'))
+
     const receitasToWrite = [...receitas, m]
     
-    fs.writeFileSync('db/receitas.json', JSON.stringify(receitasToWrite))
+    await fs.writeFile('db/receitas.json', JSON.stringify(receitasToWrite))
   }
 
-  listar() {
-    const receitasFormatadas = receitas.map((r: ReceitaFile) => new Receita(r.data, r.paciente, r.medicacoes))
+  async listar() {
+    const receitas = JSON.parse(await fs.readFile('db/receitas.json', 'utf8'))
+    if(!receitas.length) return []
+    const receitasFormatadas = receitas.map((r: ReceitaFile) => new Receita(r.id, r.data, r.paciente, r.medicacoes))
     return receitasFormatadas
   }
 }

@@ -1,13 +1,23 @@
 
 export default class Paciente {
+  private id: string;
   private nome: string; 
   private peso: number; 
   private altura: number; 
 
-  constructor(nome: string, peso: number, altura: number ){
+  constructor(id: string, nome: string, peso: number, altura: number ){
+    this.id = id;
     this.nome = nome;
     this.peso = peso;
     this.altura = altura;
+  }
+
+  public getId(): string {
+    return this.id;
+  }
+
+  public setId(id: string) {
+    this.id = id;
   }
 
   public getNome(): string {
