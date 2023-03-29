@@ -25,6 +25,8 @@ const prompt = promptS();
     console.log('7 - Cadastrar receita')
     console.log('8 - Deletar receita')
     console.log('9 - Exibir receitas')
+    console.log('10 - Adicionar medicação à receita')
+    console.log('11 - Calcular valor total de receita')
     console.log('0 - Sair')
 
     const opcao = Number(prompt("Informe a opção: "))
@@ -59,10 +61,9 @@ const prompt = promptS();
       case 4:
         const nomeMed = prompt('Nome: ')
         const unidadeMed = prompt('Unidade: ')
-        const quantidadeMed = Number(prompt('Quantidade: '))
         const valorMed = Number(prompt('Valor: '))
 
-        medicacaoController.create(nomeMed, unidadeMed, quantidadeMed, valorMed)
+        medicacaoController.create(nomeMed, unidadeMed, valorMed)
         break;
 
       case 5:
@@ -96,9 +97,24 @@ const prompt = promptS();
       case 9:
         const receitas = await receitaController.listar()
         receitas.forEach((receita: Receita) => {
-          console.log(receita);
+          console.log(receita.toString());
 
         });
+        break;
+
+      case 10:
+        const idReceita10 = prompt('Qual o id da receita: ')
+        const idMedicacao10 = prompt('Qual o id da medicação: ')
+
+        await receitaController.adicionarMedicacao(idReceita10, idMedicacao10)
+        console.log('Medicação adicionada');
+        break;
+
+      case 11:
+        const idReceita11 = prompt('Qual o id da receita: ')
+
+        const totalReceita = await receitaController.calcularValorTotal(idReceita11)
+        console.log('Total da receita: R$ ' + totalReceita);
         break;
 
       default:

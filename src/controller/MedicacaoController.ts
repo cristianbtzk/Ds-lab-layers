@@ -8,10 +8,10 @@ import generateUUID from "../utils/generateUUID";
 const medicacaoJSONPersistence = new MedicacaoJSONPersistence()
 
 export default class MedicacaoController {
-  async create(nome: string, unidade: string, quantidade: number, valor: number) {
+  async create(nome: string, unidade: string, valor: number) {
     const createMedicacaoService = new CreateMedicacaoService(medicacaoJSONPersistence)
     const id = generateUUID()
-    const medicacao = new Medicacao(id, nome, unidade, quantidade, valor)
+    const medicacao = new Medicacao(id, nome, unidade, valor)
     createMedicacaoService.execute(medicacao)
   }
 

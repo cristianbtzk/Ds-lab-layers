@@ -3,14 +3,12 @@ export default class Medicacao {
   private id: string;
   private nome: string; 
   private unidade: string; 
-  private quantidade: number; 
   private valor: number; 
 
-  constructor(id: string, nome: string, unidade: string, quantidade: number, valor: number ){
+  constructor(id: string, nome: string, unidade: string, valor: number ){
     this.id = id;
     this.nome = nome;
     this.unidade = unidade;
-    this.quantidade = quantidade;
     this.valor = valor;
   }
 
@@ -30,8 +28,11 @@ export default class Medicacao {
     return this.unidade
   }
   
-  public getQuantidade(): string {
-    return this.nome
+  public getValor(): number {
+    return this.valor
   }
   
+  public toString(): string {
+    return `Id: ${this.id}, nome: ${this.nome}, unidade: ${this.unidade}, valor: ${this.valor}`
+  }
 }

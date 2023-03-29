@@ -31,5 +31,9 @@ export default class Paciente {
   public getAltura(): number {
     return this.altura
   }
+
+  public toString(): string {
+    return `Id: ${this.id}, nome: ${this.nome}, peso: ${this.peso}, altura: ${this.altura}`
+  }
   
 }

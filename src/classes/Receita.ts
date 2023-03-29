@@ -29,5 +29,13 @@ export default class Receita {
   public getData(): Date {
     return this.data
   } 
+
+  public calcularTotal(): number {
+    return this.medicacoes.reduce((accum, medicacao: Medicacao) => accum + medicacao.getValor(), 0)
+  }
+
+  public toString(): string {
+    return `Id: ${this.id}, data: ${this.data}, medicações: ${this.medicacoes}, paciente: ${this.paciente?.toString()}`
+  }
   
 }

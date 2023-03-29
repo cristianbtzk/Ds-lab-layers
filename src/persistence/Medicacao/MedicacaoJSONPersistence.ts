@@ -32,7 +32,7 @@ export default class MedicacaoJSONPersistence implements IMedicacaoPersistence {
     const medicacoes = JSON.parse(await fs.readFile('db/medicacoes.json', 'utf8'))
     if(!medicacoes.length) return []
 
-    const medicacoesFormatadas = medicacoes.map((m: MedicacaoFile) => new Medicacao(m.id, m.nome, m.unidade, m.quantidade, m.valor))
+    const medicacoesFormatadas = medicacoes.map((m: MedicacaoFile) => new Medicacao(m.id, m.nome, m.unidade, m.valor))
     return medicacoesFormatadas
   }
 
@@ -42,6 +42,6 @@ export default class MedicacaoJSONPersistence implements IMedicacaoPersistence {
     const medicacao: MedicacaoFile = medicacoes.find((m: MedicacaoFile) => m.id === id)
     if(!medicacao) return null
 
-    return new Medicacao(medicacao.id, medicacao.nome, medicacao.unidade, medicacao.quantidade, medicacao.valor)
+    return new Medicacao(medicacao.id, medicacao.nome, medicacao.unidade, medicacao.valor)
   }
 }
