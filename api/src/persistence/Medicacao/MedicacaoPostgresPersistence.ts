@@ -23,27 +23,26 @@ export default class MedicacaoJSONPersistence implements IMedicacaoPersistence {
   async gravar(m: Medicacao) {
     const connection = await dbClient()
 
-    const sql = `INSERT INTO medicacoes(id, nome, unidade, valor) values ($1, $2, $3, $4)`
+    const sql = `INSERT INTO medicacoes(id, nome, unidade, valor) values ($1, $2, $3, $4) RETURNING *`
     const values = [m.getId(), m.getNome(), m.getUnidade(), m.getValor()]
 
-    const algo = await connection.query(sql, values)
-    return
+    const { rows } = await connection.query(sql, values)
+    return new Medicacao(rows[0].id, rows[0].nome, rows[0].unidade, rows[0].valor)
   }
 
   async listar() {
     const connection = await dbClient()
     const query = 'SELECT * FROM medicacoes'
-    const res = await connection.query(query)
-    const s =  res.rows
-    console.log('s')
-    console.log(s)
-    return s as unknown as Medicacao[]
+    const { rows } = await connection.query(query)
+    if (!rows.length) return []
+    const result = rows.map(row => new Medicacao(row.id, row.nome, row.unidade, row.valor))
+    return result
   }
 
   async buscarId(id: string) {
     const connection = await dbClient()
-    const query = 'SELECT * FROM medicacoes'
-    const res = await connection.query(query)
+    const query = 'SELECT * FROM medicacoes WHERE id=$1'
+    const res = await connection.query(query, [id])
     return res as unknown as Medicacao
   }
 }

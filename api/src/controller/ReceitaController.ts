@@ -1,54 +1,64 @@
 import Receita from "../classes/Receita";
 
 
-import MedicacaoJSONPersistence from "../persistence/Medicacao/MedicacaoJSONPersistence"
-import ReceitaJSONPersistence from "../persistence/Receita/ReceitaJSONPersistence"
-import PacienteJSONPersistence from "../persistence/Paciente/PacienteJSONPersistence"
+import MedicacaoPostgresPersistence from "../persistence/Medicacao/MedicacaoPostgresPersistence"
+import ReceitaPostgresPersistence from "../persistence/Receita/ReceitaPostgresPersistence"
+import PacientePostgresPersistence from "../persistence/Paciente/PacientePostgresPersistence"
 import CalcularValorReceitaService from "../services/Receita/CalcularValorReceitaService"
 import CreateReceitaService from "../services/Receita/CreateReceitaService"
 import DeleteReceitaService from "../services/Receita/DeleteReceitaService";
 import ListReceitasService from "../services/Receita/ListReceitasService";
 import UpdateReceitaService from "../services/Receita/UpdateReceitaService";
 import generateUUID from "../utils/generateUUID";
+import { Request, Response } from "express";
 
-const medicacaoJSONPersistence = new MedicacaoJSONPersistence()
-const pacienteJSONPersistence = new PacienteJSONPersistence()
-const receitaJSONPersistence = new ReceitaJSONPersistence()
+const medicacaoPostgresPersistence = new MedicacaoPostgresPersistence()
+const pacientePostgresPersistence = new PacientePostgresPersistence()
+const receitaPostgresPersistence = new ReceitaPostgresPersistence()
 
 export default class ReceitaController {
-  async create(idPaciente: string) {
-    const createReceitaService = new CreateReceitaService(receitaJSONPersistence)
+  async create(request: Request, response: Response) {
+    const {
+      idPaciente
+    } = request.body
+    const createReceitaService = new CreateReceitaService(receitaPostgresPersistence)
     const id = generateUUID()
     
-    const paciente = await pacienteJSONPersistence.buscarId(idPaciente)
-    
+    const paciente = await pacientePostgresPersistence.buscarId(idPaciente)
+    console.log(paciente)
     const receita = new Receita(id, new Date(), paciente, [])
-    createReceitaService.execute(receita)
+    const r = await createReceitaService.execute(receita)
+    return response.json(r)
   }
 
-  excluir(id: string) {
-    const deleteReceitaService = new DeleteReceitaService(receitaJSONPersistence)
+  excluir(request: Request, response: Response) {
+    const { id } = request.params
+    const deleteReceitaService = new DeleteReceitaService(receitaPostgresPersistence)
     deleteReceitaService.execute(id)
+    return response.json()
   }
 
-  listar(): Promise<Receita[]> {
-    const listReceitasService = new ListReceitasService(receitaJSONPersistence)
+  async listar(request: Request, response: Response){
+    const listReceitasService = new ListReceitasService(receitaPostgresPersistence)
 
-    return listReceitasService.execute()
+    const receitas = await listReceitasService.execute()
+    return response.json(receitas)
   }
 
-  async adicionarMedicacao(idReceita: string, idMedicacao: string): Promise<void> {
-    const updateReceitaService = new UpdateReceitaService(receitaJSONPersistence)
-    const medicacao = await medicacaoJSONPersistence.buscarId(idMedicacao)
-    const receita = await receitaJSONPersistence.buscarId(idReceita)
+  /* async adicionarMedicacao(request: Request, response: Response idReceita: string, idMedicacao: string): Promise<void> {
+    const updateReceitaService = new UpdateReceitaService(receitaPostgresPersistence)
+    const medicacao = await medicacaoPostgresPersistence.buscarId(idMedicacao)
+    const receita = await receitaPostgresPersistence.buscarId(idReceita)
 
     if(!medicacao || !receita) return
     receita.addMedicacao(medicacao)
     await updateReceitaService.execute(receita)
-  }
+  } */
 
-  async calcularValorTotal(idReceita: string): Promise<number> {
-    const calcularValorReceitaService = new CalcularValorReceitaService(receitaJSONPersistence)
+  async calcularValorTotal(request: Request, response: Response){
+    const { idReceita } = request.params
+
+    const calcularValorReceitaService = new CalcularValorReceitaService(receitaPostgresPersistence)
     
     const total = await calcularValorReceitaService.execute(idReceita)
     return total

@@ -15,24 +15,23 @@ export default class MedicacaoController {
       unidade,
       valor
     } = request.body
-    console.log('asda')
     const createMedicacaoService = new CreateMedicacaoService(medicacaoPostgresPersistence)
     const id = generateUUID()
     const medicacao = new Medicacao(id, nome, unidade, valor)
-    const algo = createMedicacaoService.execute(medicacao)
-    return response.json(algo)
+    const med = await createMedicacaoService.execute(medicacao)
+    return response.json(med)
   }
 
-  excluir(request: Request, response: Response) {
+  async excluir(request: Request, response: Response) {
     const { id } = request.params
     const deleteMedicacaoService = new DeleteMedicacaoService(medicacaoPostgresPersistence)
     deleteMedicacaoService.execute(id)
     return response.json()
   }
 
-  listar(request: Request, response: Response) {
+  async listar(request: Request, response: Response) {
     const listMedicacaosService = new ListMedicacaosService(medicacaoPostgresPersistence)
-
-    return response.json(listMedicacaosService.execute())
+    const result = await listMedicacaosService.execute()
+    return response.json(result)
   }
 }

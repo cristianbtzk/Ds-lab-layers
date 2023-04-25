@@ -8,6 +8,6 @@ export default class CreateMedicacaoService {
   }
 
   async execute(medicacao: Medicacao) {
-    this.medicacaoPersistence.gravar(medicacao)
+    return this.medicacaoPersistence.gravar(medicacao)
   }
 }

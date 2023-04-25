@@ -8,6 +8,6 @@ export default class CreateReceitaService {
   }
 
   async execute(Receita: Receita) {
-    this.receitaPersistence.gravar(Receita)
+    return this.receitaPersistence.gravar(Receita)
   }
 }

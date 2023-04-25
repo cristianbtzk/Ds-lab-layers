@@ -34,6 +34,10 @@ export default class Receita {
     return this.medicacoes.reduce((accum, medicacao: Medicacao) => accum + medicacao.getValor(), 0)
   }
 
+  public getPaciente(): Paciente | null {
+    return this.paciente;
+  }
+
   public toString(): string {
     return `Id: ${this.id}, data: ${this.data}, medicações: ${this.medicacoes}, paciente: ${this.paciente?.toString()}`
   }
