@@ -10,37 +10,41 @@ type MedicacaoFile = {
   valor: number;
 }
 
+
 export default class MedicacaoJSONPersistence implements IMedicacaoPersistence {
   async excluir(id: string) {
-    const medicacoes = JSON.parse(await fs.readFile('db/medicacoes.json', 'utf8'))
+    const connection = await dbClient()
 
-    const medicacoesToWrite = medicacoes.filter((m: MedicacaoFile) => m.id !== id)
-    
-    
+    const sql = 'DELETE FROM medicacoes WHERE id=$1;'
+    return await connection.query(sql, [id])
+
   }
 
   async gravar(m: Medicacao) {
-    const medicacoes = JSON.parse(await fs.readFile('db/medicacoes.json', 'utf8'))
+    const connection = await dbClient()
 
-    const medicacoesToWrite = [...medicacoes, m]
-    
+    const sql = `INSERT INTO medicacoes(id, nome, unidade, valor) values ($1, $2, $3, $4)`
+    const values = [m.getId(), m.getNome(), m.getUnidade(), m.getValor()]
+
+    const algo = await connection.query(sql, values)
+    return
   }
 
   async listar() {
-    const medicacoes = JSON.parse(await fs.readFile('db/medicacoes.json', 'utf8'))
-    if(!medicacoes.length) return []
-
-    const medicacoesFormatadas = medicacoes.map((m: MedicacaoFile) => new Medicacao(m.id, m.nome, m.unidade, m.valor))
-    return medicacoesFormatadas
+    const connection = await dbClient()
+    const query = 'SELECT * FROM medicacoes'
+    const res = await connection.query(query)
+    const s =  res.rows
+    console.log('s')
+    console.log(s)
+    return s as unknown as Medicacao[]
   }
 
   async buscarId(id: string) {
-    const medicacoes = JSON.parse(await fs.readFile('db/medicacoes.json', 'utf8'))
-  
-    const medicacao: MedicacaoFile = medicacoes.find((m: MedicacaoFile) => m.id === id)
-    if(!medicacao) return null
-
-    return new Medicacao(medicacao.id, medicacao.nome, medicacao.unidade, medicacao.valor)
+    const connection = await dbClient()
+    const query = 'SELECT * FROM medicacoes'
+    const res = await connection.query(query)
+    return res as unknown as Medicacao
   }
 }
 

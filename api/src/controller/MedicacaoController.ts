@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import Medicacao from "../classes/Medicacao";
-import MedicacaoJSONPersistence from "../persistence/Medicacao/MedicacaoJSONPersistence"
+import MedicacaoPostgresPersistence from "../persistence/Medicacao/MedicacaoPostgresPersistence"
 import CreateMedicacaoService from "../services/Medicacao/CreateMedicacaoService"
 import DeleteMedicacaoService from "../services/Medicacao/DeleteMedicacaoService";
 import ListMedicacaosService from "../services/Medicacao/ListMedicacoesService";
 import generateUUID from "../utils/generateUUID";
 
-const medicacaoJSONPersistence = new MedicacaoJSONPersistence()
+const medicacaoPostgresPersistence = new MedicacaoPostgresPersistence()
 
 export default class MedicacaoController {
   async create(request: Request, response: Response) {
@@ -15,22 +15,23 @@ export default class MedicacaoController {
       unidade,
       valor
     } = request.body
-
-    const createMedicacaoService = new CreateMedicacaoService(medicacaoJSONPersistence)
+    console.log('asda')
+    const createMedicacaoService = new CreateMedicacaoService(medicacaoPostgresPersistence)
     const id = generateUUID()
     const medicacao = new Medicacao(id, nome, unidade, valor)
-    createMedicacaoService.execute(medicacao)
+    const algo = createMedicacaoService.execute(medicacao)
+    return response.json(algo)
   }
 
   excluir(request: Request, response: Response) {
     const { id } = request.params
-    const deleteMedicacaoService = new DeleteMedicacaoService(medicacaoJSONPersistence)
+    const deleteMedicacaoService = new DeleteMedicacaoService(medicacaoPostgresPersistence)
     deleteMedicacaoService.execute(id)
     return response.json()
   }
 
   listar(request: Request, response: Response) {
-    const listMedicacaosService = new ListMedicacaosService(medicacaoJSONPersistence)
+    const listMedicacaosService = new ListMedicacaosService(medicacaoPostgresPersistence)
 
     return response.json(listMedicacaosService.execute())
   }
