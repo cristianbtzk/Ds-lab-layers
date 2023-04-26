@@ -18,3 +18,9 @@ CREATE TABLE IF NOT EXISTS receitas (
    pacienteId UUID NOT NULL,
    CONSTRAINT fk_paciente FOREIGN KEY(pacienteId) REFERENCES pacientes(id) 
 );
+
+CREATE TABLE IF NOT EXISTS receita_medicacoes (
+  receitaId UUID REFERENCES receitas(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  medicacaoId UUID REFERENCES medicacoes(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT receita_medicacao_pkey PRIMARY KEY(receitaId, medicacaoId)
+);

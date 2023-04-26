@@ -6,4 +6,5 @@ export default interface IReceitaPersistence {
   excluir(id: string): Promise<void>;
   listar(): Promise<Receita[]>;
   update(receita: Receita): Promise<Receita>;
+  addMedicamento(idReceita: string, idMedicamento: string): Promise<void>;
 }

@@ -8,7 +8,7 @@ import CalcularValorReceitaService from "../services/Receita/CalcularValorReceit
 import CreateReceitaService from "../services/Receita/CreateReceitaService"
 import DeleteReceitaService from "../services/Receita/DeleteReceitaService";
 import ListReceitasService from "../services/Receita/ListReceitasService";
-import UpdateReceitaService from "../services/Receita/UpdateReceitaService";
+import AddMedicacaoService from "../services/Receita/AddMedicacaoService";
 import generateUUID from "../utils/generateUUID";
 import { Request, Response } from "express";
 
@@ -25,7 +25,6 @@ export default class ReceitaController {
     const id = generateUUID()
     
     const paciente = await pacientePostgresPersistence.buscarId(idPaciente)
-    console.log(paciente)
     const receita = new Receita(id, new Date(), paciente, [])
     const r = await createReceitaService.execute(receita)
     return response.json(r)
@@ -45,15 +44,19 @@ export default class ReceitaController {
     return response.json(receitas)
   }
 
-  /* async adicionarMedicacao(request: Request, response: Response idReceita: string, idMedicacao: string): Promise<void> {
-    const updateReceitaService = new UpdateReceitaService(receitaPostgresPersistence)
+  async adicionarMedicacao(request: Request, response: Response) {
+    const { idReceita } = request.params
+    const {
+      idMedicacao
+    } = request.body
+    const addMedicacaoService = new AddMedicacaoService(receitaPostgresPersistence)
     const medicacao = await medicacaoPostgresPersistence.buscarId(idMedicacao)
     const receita = await receitaPostgresPersistence.buscarId(idReceita)
 
     if(!medicacao || !receita) return
-    receita.addMedicacao(medicacao)
-    await updateReceitaService.execute(receita)
-  } */
+    await addMedicacaoService.execute(idReceita, idMedicacao)
+    return response.json()
+  }
 
   async calcularValorTotal(request: Request, response: Response){
     const { idReceita } = request.params

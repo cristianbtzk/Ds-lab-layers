@@ -7,7 +7,7 @@ export default class UpdateReceitaService {
     this.receitaPersistence = receitaPersistence;
   }
 
-  async execute(receita: Receita) {
-    this.receitaPersistence.update(receita)
+  async execute(idReceita: string, idMedicacao: string) {
+    this.receitaPersistence.addMedicamento(idReceita, idMedicacao)
   }
 }

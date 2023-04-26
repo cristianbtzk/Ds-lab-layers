@@ -8,4 +8,5 @@ const receitaController = new ReceitaController()
 export default router
   .get('/receita', receitaController.listar)
   .post('/receita', receitaController.create)
+  .post('/receita/:idReceita/medicacao', receitaController.adicionarMedicacao)
   .delete('/receita/:id', receitaController.excluir)

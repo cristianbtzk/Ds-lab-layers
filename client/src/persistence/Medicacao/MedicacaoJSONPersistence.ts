@@ -45,3 +45,5 @@ export default class MedicacaoJSONPersistence implements IMedicacaoPersistence {
     return new Medicacao(medicacao.id, medicacao.nome, medicacao.unidade, medicacao.valor)
   }
 }
+
+
