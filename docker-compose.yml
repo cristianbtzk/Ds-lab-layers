@@ -15,6 +15,7 @@ services:
       - ./api:/usr/src/api
     depends_on:
       - postgres
+  
   postgres:
     image: postgres
     container_name: ds-postgres
@@ -26,7 +27,18 @@ services:
       - POSTGRES_PASSWORD=ds
     networks:
       - ds-network
-
+  app:
+    build:
+      dockerfile: .
+      context: ./client
+    image: ds-client-image
+    container_name: ds-client-web
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./client:/usr/src/app
+    networks:
+      - ds-network
 networks:
   ds-network:
     driver: bridge

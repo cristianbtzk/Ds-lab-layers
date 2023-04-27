@@ -3,10 +3,11 @@ import express from 'express'
 import medicacaoRouter from './src/routers/medicacaoRouter'
 import pacienteRouter from './src/routers/pacienteRouter'
 import receitaRouter from './src/routers/receitaRouter'
+import cors from 'cors'
 const app = express()
 
 app.use(express.json())
-
+app.use(cors())
 app.use('/api', medicacaoRouter)
 app.use('/api', pacienteRouter)
 app.use('/api', receitaRouter)
